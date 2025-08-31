@@ -1,0 +1,21 @@
+int latchPin = 8;  // STCP
+int clockPin = 12; // SHCP
+int dataPin  = 11; // DS
+
+void setup() {
+  pinMode(latchPin, OUTPUT);
+  pinMode(dataPin, OUTPUT);  
+  pinMode(clockPin, OUTPUT);
+}
+
+void loop() {
+  digitalWrite(latchPin, LOW);
+  shiftOut(dataPin, clockPin, LSBFIRST, 0b11111111); // 全部亮
+  digitalWrite(latchPin, HIGH);
+  delay(1000);
+
+  digitalWrite(latchPin, LOW);
+  shiftOut(dataPin, clockPin, LSBFIRST, 0b00000000); // 全部滅
+  digitalWrite(latchPin, HIGH);
+  delay(1000);
+}
