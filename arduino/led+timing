@@ -7,7 +7,7 @@ int latchPin = 8;   // STCP
 int clockPin = 12;  // SHCP
 int dataPin  = 11;  // DS
 
-// 設定開燈與關燈時間
+// set the time for on and off
 const int START_HOUR = 8;   // 08:00 LED on
 const int END_HOUR   = 20;  // 20:00 LED off
 
@@ -31,18 +31,17 @@ void setup() {
 void loop() {
   DateTime now = rtc.now();
 
-  // 判斷是否在時間區間
   bool on = (now.hour() >= START_HOUR) && (now.hour() < END_HOUR);
 
   if (on) {
     // 08:00–20:00 → LED open
     setAll(0xFF);  
   } else {
-    // 其他時間 →  LED off
+    // other time →  LED off
     setAll(0x00);
   }
 
-  // 印出狀態
+  // print out the time
   Serial.print("Time ");
   print2(now.hour()); Serial.print(":");
   print2(now.minute()); Serial.print(":");
@@ -53,7 +52,7 @@ void loop() {
   delay(1000);
 }
 
-// 將數值送到 74HC595
+// send the data to 74HC595
 void setAll(byte value) {
   digitalWrite(latchPin, LOW);
   shiftOut(dataPin, clockPin, LSBFIRST, value);
