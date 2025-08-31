@@ -1,0 +1,66 @@
+#include <Wire.h>
+#include "RTClib.h"
+
+RTC_DS3231 rtc;  //
+
+int latchPin = 8;   // STCP
+int clockPin = 12;  // SHCP
+int dataPin  = 11;  // DS
+
+// 設定開燈與關燈時間
+const int START_HOUR = 8;   // 08:00 LED on
+const int END_HOUR   = 20;  // 20:00 LED off
+
+void setup() {
+  pinMode(latchPin, OUTPUT);
+  pinMode(clockPin, OUTPUT);
+  pinMode(dataPin,  OUTPUT);
+
+  Serial.begin(9600);
+  delay(200);
+
+  if (!rtc.begin()) {
+    Serial.println("RTC not found, check wiring!");
+    while (1);
+  }
+
+  // if RTC out of battery ， use this to set the time again
+  // rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+}
+
+void loop() {
+  DateTime now = rtc.now();
+
+  // 判斷是否在時間區間
+  bool on = (now.hour() >= START_HOUR) && (now.hour() < END_HOUR);
+
+  if (on) {
+    // 08:00–20:00 → LED open
+    setAll(0xFF);  
+  } else {
+    // 其他時間 →  LED off
+    setAll(0x00);
+  }
+
+  // 印出狀態
+  Serial.print("Time ");
+  print2(now.hour()); Serial.print(":");
+  print2(now.minute()); Serial.print(":");
+  print2(now.second());
+  Serial.print("  LEDs: ");
+  Serial.println(on ? "ON" : "OFF");
+
+  delay(1000);
+}
+
+// 將數值送到 74HC595
+void setAll(byte value) {
+  digitalWrite(latchPin, LOW);
+  shiftOut(dataPin, clockPin, LSBFIRST, value);
+  digitalWrite(latchPin, HIGH);
+}
+
+void print2(int v) {
+  if (v < 10) Serial.print('0');
+  Serial.print(v);
+}
