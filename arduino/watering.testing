@@ -1,0 +1,11 @@
+void setup() {
+  pinMode(7, OUTPUT); // 水泵接在 D7（透過繼電器/三極體控制）
+  Serial.begin(9600);
+}
+
+void loop() {
+  digitalWrite(7, HIGH); // 開水泵
+  delay(2000);           // 持續 2 秒
+  digitalWrite(7, LOW);  // 關水泵
+  delay(5000);           // 等 5 秒再重複
+}
