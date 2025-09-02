@@ -6,4 +6,5 @@ Read this!!!!
 - **led_shify register** →  Control LEDs with the 74HC595 shift register (More like a testing program for led+timing)
 - **plant.watering** → Automatic watering using soil moisture sensor. When the soil moistture percent is below a number, it will automaticlly open the watering system.
 - **watering.testing** →testing your watering system (ONLY water pump)
-
+- **APDS-9960.data** →collecting data (RBG) to create an algorithm
+- 
