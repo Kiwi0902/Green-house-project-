@@ -1,0 +1,54 @@
+#include <Wire.h>
+
+#define APDS9960_ADDRESS 0x39
+
+#define ENABLE 0x80
+#define ATIME  0x81
+#define CONTROL 0x8F
+#define CDATAL  0x94
+
+void writeRegister(byte reg, byte value) {
+  Wire.beginTransmission(APDS9960_ADDRESS);
+  Wire.write(reg);
+  Wire.write(value);
+  Wire.endTransmission();
+}
+
+void readColorData(uint16_t &r, uint16_t &g, uint16_t &b, uint16_t &c) {
+  Wire.beginTransmission(APDS9960_ADDRESS);
+  Wire.write(CDATAL);
+  Wire.endTransmission();
+  Wire.requestFrom(APDS9960_ADDRESS, 8);
+
+  c = Wire.read() | (Wire.read() << 8);
+  r = Wire.read() | (Wire.read() << 8);
+  g = Wire.read() | (Wire.read() << 8);
+  b = Wire.read() | (Wire.read() << 8);
+}
+
+void setup() {
+  Serial.begin(9600);
+  Wire.begin();
+  delay(100);
+
+ 
+  writeRegister(ENABLE, 0b00000011);
+
+
+  writeRegister(ATIME, 0xDB); 
+
+ 
+  writeRegister(CONTROL, 0x01); 
+}
+
+void loop() {
+  uint16_t r, g, b, c;
+  readColorData(r, g, b, c);
+
+  Serial.print("R: "); Serial.print(r);
+  Serial.print("  G: "); Serial.print(g);
+  Serial.print("  B: "); Serial.print(b);
+  Serial.print("  C: "); Serial.println(c);
+
+  delay(1000); 
+}
