@@ -1,1 +1,169 @@
+// 感測葉子顏色並判斷健康狀態（使用低階 I2C 控制）
+#include <Wire.h>
 
+#define APDS9960_ADDRESS 0x39
+
+void setup() {
+  Serial.begin(9600);
+  Wire.begin();
+  delay(500);
+
+  // 啟用感測器（PON + AEN）
+  writeRegister(0x80, 0b00000011);
+  writeRegister(0x81, 0xDB);  // 整合時間 ≈ 100ms
+  writeRegister(0x8F, 0x01);  // AGAIN = 4x 增益
+
+  delay(10);
+  Serial.println("✅ 感測器初始化完成，開始讀取並分類...");
+}
+
+void loop() {
+  uint16_t c = readWord(0x94); // Clear
+  uint16_t r = readWord(0x96); // Red
+  uint16_t g = readWord(0x98); // Green
+  uint16_t b = readWord(0x9A); // Blue
+
+  String label = classifyLeaf(r, g, b, c);
+
+  Serial.print("R: "); Serial.print(r);
+  Serial.print(" G: "); Serial.print(g);
+  Serial.print(" B: "); Serial.print(b);
+  Serial.print(" Clear: "); Serial.print(c);
+  Serial.print(" --> 狀態："); Serial.println(label);
+
+  delay(2000);
+}
+
+void writeRegister(uint8_t reg, uint8_t value) {
+  Wire.beginTransmission(APDS9960_ADDRESS);
+  Wire.write(reg);
+  Wire.write(value);
+  Wire.endTransmission();
+}
+
+uint16_t readWord(uint8_t reg) {
+  Wire.beginTransmission(APDS9960_ADDRESS);
+  Wire.write(reg);
+  Wire.endTransmission(false);
+
+  Wire.requestFrom(APDS9960_ADDRESS, 2);
+  uint8_t lsb = Wire.read();
+  uint8_t msb = Wire.read();
+  return ((uint16_t)msb << 8) | lsb;
+}
+
+String classifyLeaf(uint16_t r, uint16_t g, uint16_t b, uint16_t c) {
+  String label = "";
+
+  if (r <= 93.50) {
+    if (g <= 88.00) {
+      if (c <= 196.50) {
+        if (r <= 30.50) {
+          label = "healthy";
+        } else {
+          if (g <= 62.50) {
+            if (b <= 34.00) {
+              if (g <= 34.00) {
+                label = "dry";
+              } else {
+                label = "yellow";
+              }
+            } else {
+              label = "dry";
+            }
+          } else {
+            label = "healthy";
+          }
+        }
+      } else {
+        label = "yellow";
+      }
+    } else {
+      label = "healthy";
+    }
+  } else {
+    if (g <= 123.00) {
+      if (b <= 80.50) {
+        if (r <= 175.50) {
+          if (g <= 106.00) {
+            if (g <= 81.50) {
+              label = "dry";
+            } else {
+              if (b <= 66.00) {
+                if (r <= 128.50) {
+                  label = "yellow";
+                } else {
+                  if (r <= 153.50) {
+                    label = "dry";
+                  } else {
+                    label = "yellow";
+                  }
+                }
+              } else {
+                label = "dry";
+              }
+            }
+          } else {
+            if (c <= 287.50) {
+              label = "healthy";
+            } else {
+              label = "yellow";
+            }
+          }
+        } else {
+          label = "yellow";
+        }
+      } else {
+        label = "dry";
+      }
+    } else {
+      if (r <= 149.00) {
+        if (b <= 89.00) {
+          if (b <= 68.50) {
+            label = "dry";
+          } else {
+            if (g <= 174.50) {
+              label = "yellow";
+            } else {
+              label = "healthy";
+            }
+          }
+        } else {
+          label = "healthy";
+        }
+      } else {
+        if (r <= 220.00) {
+          if (g <= 144.50) {
+            if (r <= 210.50) {
+              if (b <= 108.50) {
+                label = "yellow";
+              } else {
+                label = "dry";
+              }
+            } else {
+              label = "dry";
+            }
+          } else {
+            label = "yellow";
+          }
+        } else {
+          if (r <= 249.00) {
+            label = "dry";
+          } else {
+            if (c <= 1062.00) {
+              if (b <= 107.50) {
+                label = "dry";
+              } else {
+                label = "yellow";
+              }
+            } else {
+              label = "dry";
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return label;
+}
