@@ -8,8 +8,12 @@ Read this!!!!
   
 - **plant.watering** → Automatic watering using soil moisture sensor. When the soil moistture percent is below a number, it will automaticlly open the watering system.
   
-- **watering.testing** →testing your watering system (ONLY water pump)
+- **watering.testing** →Testing your watering system (ONLY water pump)
   
-- **APDS-9960.data** →collecting data (RBG) to create an algorithm
+- **APDS-9960.data** →Collecting data (RBG) to create an algorithm
 
-- **APDS-9960** →allow APDS-9960 to check the plant health condition by using RGB
+- **APDS-9960** →Allow APDS-9960 to check the plant health condition by using RGB
+
+(I'm not combining the program together because you can decide how many Arduino Uno you are using.
+
+For my project, I use 2 Arduino barod: The first one is controlling watering system and APDS-9960. The second one is controlling the led system with RTC
