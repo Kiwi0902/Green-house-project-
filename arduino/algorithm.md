@@ -32,5 +32,6 @@ Else if Rnorm < 0.4 and Gnorm < 0.3 → Leaf is Dry
    
    You can use "if, else if, else" to write your coding
 
-# Harder version
+# Other way(What i'm using)
+This will be a bit hard, but you can learn more from it, I recommand using this!!!
 
