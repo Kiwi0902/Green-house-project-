@@ -12,4 +12,4 @@ Read this!!!!
   
 - **APDS-9960.data** →collecting data (RBG) to create an algorithm
 
-- 
+- **APDS-9960** →allow APDS-9960 to check the plant health condition by using RGB
