@@ -14,6 +14,6 @@ Read this!!!!
 
 - **APDS-9960** →Allow APDS-9960 to check the plant health condition by using RGB
 
-(I'm not combining the program together because you can decide how many Arduino Uno you are using.
+(I'm not combining the program together because you can decide how many Arduino Uno you are using)
 
 For my project, I use 2 Arduino barod: The first one is controlling watering system and APDS-9960. The second one is controlling the led system with RTC
