@@ -31,8 +31,8 @@
 ## 4. Connect with VNC Viewer
 1. Open **VNC Viewer** on your computer.  
 2. Enter your Raspberry Pi’s IP address (or `raspberrypi.local`).  
-3. Login with your Pi credentials:  
-   - Username: `pi`  
-   - Password: `raspberry` (or the one you set in Imager).  
-4. Now you’ll see the Raspberry Pi desktop on your computer! 
+3. When prompted, enter your **Raspberry Pi login credentials**:  
+   - **Username:** the one you set in Raspberry Pi Imager (default: `pi`)  
+   - **Password:** the one you set (default: `raspberry`)  
+4. Once logged in, the Raspberry Pi desktop will appear on your computer!  
 
