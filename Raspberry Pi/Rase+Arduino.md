@@ -51,8 +51,17 @@ void loop() {
 ```
 ---
 ## 5. Get LINE Token
-Raspberry Pi Code
-Create a file on Raspberry Pi called send_to_line.py:
+- Go to your home folder (or create a project folder):
+```cpp
+  cd ~
+# or make a folder for this project
+mkdir ~/PlantProject && cd ~/PlantProject
+```
+- Create the file:
+```
+nano send_to_line.py
+```
+- Paste the following code inside Nano:
 ```cpp
 import serial, time, requests
 
@@ -73,7 +82,10 @@ while True:
         send_line(f"🌱 Sensor Value: {data}")
         time.sleep(10)  # send every 10 seconds
 ```
-- Replace YOUR_LINE_TOKEN with your token from Step 3.
+- Save and exit Nano:
+  Press CTRL + O → Enter (save)
+  Press CTRL + X (exit)
+- Now the file send_to_line.py is created in your folder.
 ---
 ## 6. Get LINE Token
 Run the Program
